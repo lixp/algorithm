@@ -20,12 +20,25 @@ public class FindSth {
         if(arr == null || arr.length == 0) {
             return -2;
         }
-        int len = arr.length;
-        boolean flag = true;
-        while(flag){
-            int mid = len/2;
-            //if(arr[mid])
+
+        int left = 0;
+        int right = arr.length-1;
+        int mid = (right + left)/2;
+        while(left <= mid && mid <right){
+            if(arr[mid] == key) {
+                return mid;
+            }
+
+            if(arr[mid] < key) {
+                left = mid;
+            }
+
+            if(arr[mid] > key) {
+                right = mid;
+            }
+            mid = (left + right)/2;
         }
+
         //-1 没有找到, -2 输入不能为空，空里边分为两种情况，null||size=0
         return -1;
     }
@@ -75,12 +88,18 @@ public class FindSth {
     }
 
     public static void main(String[] args) {
-        int param[] = new int[]{45,63,82,13,23,23,24,22,30,48,49};
+        int param[] = new int[]{45,63,82,13,23,24,22,30,48,49};
         int result[] = sortArrV(param);
         if(result != null) {
             for (int key : result) {
                 System.out.print(key + " ");
             }
+        }
+        int cursor = findIter(result, 23);
+        if(cursor == -2) {
+            System.out.print("can not find");
+        }else {
+            System.out.print("find 23 index is " + cursor + ",value is " + result[cursor]);
         }
     }
 }
