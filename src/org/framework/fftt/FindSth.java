@@ -40,7 +40,6 @@ public class FindSth {
             return null;
         }
         for(int i = 0; i < arr.length; i++) {
-            int k = i;
             for(int index = i+1; index < arr.length; index++) {
                 //此处需要优化，每次需要交换，浪费
                 if(arr[i] > arr[index]){
