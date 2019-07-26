@@ -11,7 +11,23 @@ public class FindSth {
     public static int arr[] = {1, 3, 5, 7, 0};
 
     /**
-     * 二分查找，前提是要排序
+     *
+     * @param arr
+     * @param left
+     * @param right
+     * @return
+     */
+    public static int findRecursion(int [] arr, int left, int right, int key){
+        int mid = (left + right)/2;
+        if(arr[mid] == key) return mid;
+        if(left >= right) return -2;
+        if(arr[mid] > key) findRecursion(arr, left, mid, key);
+        if(arr[mid] < key) findRecursion(arr, mid, right, key);
+        return -2;
+    }
+
+    /**
+     * 迭代二分查找，前提是要排序
      * @param arr
      * @param key
      * @return
@@ -21,27 +37,30 @@ public class FindSth {
             return -2;
         }
 
-        int left = 0;
-        int right = arr.length-1;
-        int mid = (right + left)/2;
-        while(left <= mid && mid <right){
+        int left = 0, right = arr.length-1, mid;
+        while(left <= right){
+
+             mid = left + (right - left)/2;
+
             if(arr[mid] == key) {
                 return mid;
             }
 
             if(arr[mid] < key) {
-                left = mid;
+                left = mid + 1;
             }
 
             if(arr[mid] > key) {
-                right = mid;
+                right = mid - 1;
             }
-            mid = (left + right)/2;
+
+           // System.out.println("left is " + left + ",right is " + right + ",mid is " + mid);
         }
 
         //-1 没有找到, -2 输入不能为空，空里边分为两种情况，null||size=0
-        return -1;
+        return -2;
     }
+
 
     /**
      * 选择排序,这里交换过于频繁，优化下
@@ -88,14 +107,15 @@ public class FindSth {
     }
 
     public static void main(String[] args) {
-        int param[] = new int[]{45,63,82,13,23,24,22,30,48,49};
+        int param[] = new int[]{45,63,82,13,23,24,22,30,48,83};
+       // int param[] = new int[]{41};
         int result[] = sortArrV(param);
         if(result != null) {
             for (int key : result) {
                 System.out.print(key + " ");
             }
         }
-        int cursor = findIter(result, 23);
+        int cursor = findIter(result, 83);
         if(cursor == -2) {
             System.out.print("can not find");
         }else {
