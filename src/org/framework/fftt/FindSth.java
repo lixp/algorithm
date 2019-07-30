@@ -18,12 +18,14 @@ public class FindSth {
      * @return
      */
     public static int findRecursion(int [] arr, int left, int right, int key){
-        int mid = (left + right)/2;
+        int mid = left + (right - left)/2;
         if(arr[mid] == key) return mid;
         if(left >= right) return -2;
-        if(arr[mid] > key) findRecursion(arr, left, mid, key);
-        if(arr[mid] < key) findRecursion(arr, mid, right, key);
-        return -2;
+        if(arr[mid] > key) {
+            return findRecursion(arr, left, mid-1, key);
+        } else{
+            return findRecursion(arr, mid+1, right, key);
+        }
     }
 
     /**
@@ -115,7 +117,7 @@ public class FindSth {
                 System.out.print(key + " ");
             }
         }
-        int cursor = findIter(result, 83);
+        int cursor = findRecursion(result, 0, result.length-1,41);
         if(cursor == -2) {
             System.out.print("can not find");
         }else {
