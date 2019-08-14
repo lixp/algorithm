@@ -1,10 +1,5 @@
 package org.framework.fftt;
 
-
-import java.util.*;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -22,19 +17,22 @@ class EvenOdd {
 
     private AtomicInteger ai = new AtomicInteger(-1);
 
-    public AtomicInteger getNum() {
-        return ai;
-    }
-
     public synchronized void oddPlused() {
         ai.getAndIncrement();
         evenOK = true; // ready to evenplus.
+        System.out.println(ai.get());
         notifyAll();
     }
 
     public synchronized void evenPlused() {
         ai.getAndAdd(1);
         evenOK = false; //ready to oddPlus.
+        if(ai.intValue() != 0) {
+            System.out.println(ai.get());
+        }
+        if(ai.intValue() == 100) {
+            System.exit(0);
+        }
         notify();
     }
 
@@ -62,10 +60,8 @@ class EvenPlus implements Runnable {
     public void run() {
         while (!Thread.interrupted()) {
             try {
-                TimeUnit.MILLISECONDS.sleep(50l);
-                evenOdd.evenPlused();
-                System.out.println("even plus---" + evenOdd.getNum().get());
-                evenOdd.waitForOddPlusing();
+               evenOdd.evenPlused();
+               evenOdd.waitForOddPlusing();
             } catch (InterruptedException e) {
                 System.out.println("exiting even plus via interrupt");
             }
@@ -85,15 +81,9 @@ class OddPlus implements Runnable {
     @Override
     public void run() {
         while (!Thread.interrupted()) {
-
             try {
                 evenOdd.waitForEvenPlusing();
-                TimeUnit.MILLISECONDS.sleep(50l);
                 evenOdd.oddPlused();
-                System.out.println("odd plus---" + evenOdd.getNum().get());
-                if(evenOdd.getNum().intValue() == 100) {
-                    System.exit(0);
-                }
             } catch (InterruptedException e) {
                 System.out.println("exiting odd plus via interrupt");
             }
