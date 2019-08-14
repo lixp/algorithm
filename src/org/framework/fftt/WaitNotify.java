@@ -3,7 +3,11 @@ package org.framework.fftt;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Created with IntelliJ IDEA.
+ * 原子操作意思是必须在锁里进行
+ * 这里的语义是前置条件是获取锁,后置条件是释放锁即:
+ * *******获取锁******
+ *     **原子操作**
+ * *******释放锁******
  * User: lixp
  * Date: 2019/8/13
  * Time: 10:32
@@ -18,14 +22,14 @@ class EvenOdd {
     private AtomicInteger ai = new AtomicInteger(-1);
 
     public synchronized void oddPlused() {
-        ai.getAndIncrement();
+        ai.getAndIncrement();//原子操作必须在获取锁后和释放锁前进行
         evenOK = true; // ready to evenplus.
         System.out.println(ai.get());
         notifyAll();
     }
 
     public synchronized void evenPlused() {
-        ai.getAndAdd(1);
+        ai.getAndAdd(1);//原子操作必须在获取锁后和释放锁前进行
         evenOK = false; //ready to oddPlus.
         if(ai.intValue() != 0) {
             System.out.println(ai.get());
